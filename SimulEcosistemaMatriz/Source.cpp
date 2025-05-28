@@ -22,5 +22,7 @@ int main() {
 
     entorno->limpiar();
 
+
+    cout << "Hola." << endl; 
     return 0;
 }
