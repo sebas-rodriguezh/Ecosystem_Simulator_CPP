@@ -1,0 +1,7 @@
+#pragma once
+#include "EstrategiaAlimentacion.h"
+
+class AlimentacionH : public EstrategiaAlimentacion {
+public:
+    void alimentar(Criatura* c) override;
+};
