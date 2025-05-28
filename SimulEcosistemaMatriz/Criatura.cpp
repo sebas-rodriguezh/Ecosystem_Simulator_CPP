@@ -18,17 +18,6 @@ void Criatura::setEstrategias(EstrategiaMovimiento* em, EstrategiaAlimentacion* 
 	estrategiaReproduccion = er;
 }
 
-void Criatura::actuar() {
-
-	if (estrategiaMovimiento)
-		estrategiaMovimiento->mover(this);
-	if (estrategiaAlimentacion)
-		estrategiaAlimentacion->alimentar(this);
-	if (estrategiaReproduccion)
-		estrategiaReproduccion->reproducir(this);
-
-	incrementarEdad();
-}
 
 void Criatura::incrementarEdad() {
 	edad++;
@@ -52,11 +41,13 @@ int Criatura::getNivelDeEnergia() {
 	return nivelDeEnergia;
 }
 
+void Criatura::alimentar(Recurso* r) {
+	if (estrategiaAlimentacion) {
+		estrategiaAlimentacion->alimentar(this, r);
+	}
+}
+
 void Criatura::setPos(int x, int y) {
 
 	Elemento::setPosicion(x, y);
-}
-
-string Criatura::tipo() {
-	return "Criatura";
 }

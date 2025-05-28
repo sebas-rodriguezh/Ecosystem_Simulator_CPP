@@ -34,9 +34,11 @@ public:
 	int getNivelDeEnergia();
 	//metodos
 	void incrementarEdad();
-	virtual void actuar();
+
+	void alimentar(Recurso* r);
+
 
 	void setPos(int x, int y);
 
-	string tipo() override;
+	virtual string tipo()=0;
 };

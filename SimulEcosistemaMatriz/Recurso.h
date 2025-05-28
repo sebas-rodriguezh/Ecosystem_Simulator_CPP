@@ -13,6 +13,6 @@ public:
     int getEnergiaDisponible() const;
     void consumir(int cantidad);
 
-    virtual string tipo() override; // retorna tipo recurso
+    virtual string tipo()=0; // retorna tipo recurso
 
 };

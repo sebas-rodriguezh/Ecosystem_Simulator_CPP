@@ -23,7 +23,14 @@ int main() {
     entorno->limpiar();
 
 
-    cout << "Hola." << endl; 
-    cout << "priueba" << endl;
+    Planta* recurso1 = new Planta(0, 0, 50); 
+    FabricaCriaturas f;
+    Criatura* herbi = f.crear("Herbivoro", 0, 0);
+   // Herbivoro* herbi = new Herbivoro(0, 0,4, 20); 
+    if (Herbivoro* h = dynamic_cast<Herbivoro*>(herbi)) {
+        h->alimentar(recurso1);
+    }
+
+
     return 0;
 }

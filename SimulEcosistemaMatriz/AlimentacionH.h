@@ -3,5 +3,5 @@
 
 class AlimentacionH : public EstrategiaAlimentacion {
 public:
-    void alimentar(Criatura* c) override;
+    void alimentar(Criatura* c, Recurso* r) override;
 };

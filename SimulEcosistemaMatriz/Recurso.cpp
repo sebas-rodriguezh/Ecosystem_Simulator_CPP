@@ -17,7 +17,3 @@ void Recurso::consumir(int cantidad) {
 	if (energiaDisponible < 0) { energiaDisponible = 0; }
 
 }
-
-string Recurso::tipo() {
-	return "Recurso";
-}
