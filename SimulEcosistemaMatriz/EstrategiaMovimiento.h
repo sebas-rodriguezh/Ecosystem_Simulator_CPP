@@ -1,11 +1,12 @@
 #pragma once
 
+#include <utility> // para par ordenado 
+using namespace std; 
 class Criatura;
-class Entorno;
 
-class EstrategiaMovimiento
-{
+class EstrategiaMovimiento {
 public:
-	virtual void mover(Criatura* c) = 0;
-	virtual ~EstrategiaMovimiento() {}
+   
+    virtual pair<int, int> calcularMovimiento(Criatura* c) = 0;  //para q retorne dos numeros
+    virtual ~EstrategiaMovimiento() {}
 };

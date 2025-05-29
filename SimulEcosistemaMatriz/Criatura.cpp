@@ -47,6 +47,13 @@ void Criatura::alimentar(Recurso* r) {
 	}
 }
 
+pair<int, int> Criatura::mover() {
+	if (estrategiaMovimiento) { 
+		return estrategiaMovimiento->calcularMovimiento(this); 
+	}
+		return { x, y }; // Si no hay estrategia, se queda en la misma posición 
+}
+
 void Criatura::setPos(int x, int y) {
 
 	Elemento::setPosicion(x, y);

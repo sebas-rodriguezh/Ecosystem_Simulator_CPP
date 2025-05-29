@@ -36,7 +36,7 @@ public:
 	void incrementarEdad();
 
 	void alimentar(Recurso* r);
-
+	pair<int, int> mover(); 
 
 	void setPos(int x, int y);
 
