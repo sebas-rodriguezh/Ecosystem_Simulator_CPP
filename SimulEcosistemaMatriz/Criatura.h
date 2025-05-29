@@ -37,7 +37,8 @@ public:
 
 	void alimentar(Recurso* r);
 	pair<int, int> mover(); 
-
+	Criatura* reproducir(Criatura* c1,Criatura* c2); 
+	
 	void setPos(int x, int y);
 
 	virtual string tipo()=0;

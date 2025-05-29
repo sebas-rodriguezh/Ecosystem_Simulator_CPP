@@ -1,12 +1,12 @@
 #pragma once
 
 class Criatura;
-class Entorno;
+
 
 class EstrategiaReproduccion
 {
 public:
-    virtual Criatura* reproducir(Criatura* c) = 0;
+    virtual Criatura* reproducirConLaPareja(Criatura* c1, Criatura* c2) = 0;
     virtual ~EstrategiaReproduccion() {}
 
 };

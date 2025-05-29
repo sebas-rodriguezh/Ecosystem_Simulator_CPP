@@ -54,7 +54,18 @@ pair<int, int> Criatura::mover() {
 		return { x, y }; // Si no hay estrategia, se queda en la misma posición 
 }
 
+
+Criatura* Criatura::reproducir(Criatura* c1, Criatura* c2) {
+	if (estrategiaReproduccion) {
+		return estrategiaReproduccion->reproducirConLaPareja(c1, c2); 
+	}
+	return nullptr; 
+}
+
+
 void Criatura::setPos(int x, int y) {
 
 	Elemento::setPosicion(x, y);
 }
+
+

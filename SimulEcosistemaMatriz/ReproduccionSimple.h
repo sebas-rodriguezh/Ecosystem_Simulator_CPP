@@ -3,5 +3,6 @@
 
 class ReproduccionSimple : public EstrategiaReproduccion {
 public:
-    Criatura* reproducir(Criatura* c) override;
+    Criatura* reproducirConLaPareja (Criatura* c1, Criatura* c2) override;
+
 };

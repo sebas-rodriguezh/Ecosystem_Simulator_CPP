@@ -52,6 +52,22 @@ int main() {
         std::cout << "Movimiento " << i + 1 << ": (" << criatura->getX() << ", " << criatura->getY() << ")\n";
     }
 
+    
+    Criatura* herbi2 = f.crear("Herbivoro", 0, 0);
+
+    herbi->reproducir(herbi, herbi2); 
+
+    Criatura* hijo = herbi->reproducir(herbi, herbi2);
+
+    if (hijo) {
+        cout << "Se creo un nuevo herbivoro. " << endl; 
+        cout << endl << hijo->tipo() << endl;
+    }
+    else {
+        cout << "No se creo. " << endl; 
+    }
+
+    delete hijo; 
     delete criatura;
     return 0;
 }
