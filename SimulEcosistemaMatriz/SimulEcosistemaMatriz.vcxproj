@@ -137,7 +137,9 @@
     <ClInclude Include="FabricaCriaturas.h" />
     <ClInclude Include="FabricaElemento.h" />
     <ClInclude Include="Herbivoro.h" />
+    <ClInclude Include="ListaCriatura.h" />
     <ClInclude Include="MovimientoAleatorio.h" />
+    <ClInclude Include="NodoCriatura.h" />
     <ClInclude Include="Omnivoro.h" />
     <ClInclude Include="Planta.h" />
     <ClInclude Include="Recurso.h" />
@@ -156,7 +158,9 @@
     <ClCompile Include="FabricaCriaturas.cpp" />
     <ClCompile Include="FabricaElemento.cpp" />
     <ClCompile Include="Herbivoro.cpp" />
+    <ClCompile Include="ListaCriatura.cpp" />
     <ClCompile Include="MovimientoAleatorio.cpp" />
+    <ClCompile Include="NodoCriatura.cpp" />
     <ClCompile Include="Omnivoro.cpp" />
     <ClCompile Include="Planta.cpp" />
     <ClCompile Include="Recurso.cpp" />

@@ -11,7 +11,7 @@ int Recurso::getEnergiaDisponible() const {
 }
 
 
-//revisar
+//no lo borre si lo usamos
 void Recurso::consumir(int cantidad) {
 	energiaDisponible -= cantidad;
 	if (energiaDisponible < 0) { energiaDisponible = 0; }

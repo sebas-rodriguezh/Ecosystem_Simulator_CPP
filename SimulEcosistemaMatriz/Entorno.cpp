@@ -15,6 +15,7 @@ Entorno::Entorno(int filas, int columnas) : filas(filas), columnas(columnas) {
             matriz[i][j] = nullptr;
         }
     }
+    listaC = new ListaCriatura();
 }
 
 Entorno::~Entorno() {
@@ -25,6 +26,7 @@ Entorno::~Entorno() {
         delete[] matriz[i];
     }
     delete[] matriz;
+    delete listaC;
 }
 
 Entorno* Entorno::getInstancia(int filas, int columnas) {
@@ -48,6 +50,11 @@ void Entorno::agregarElemento(Elemento* elem) {
     int y = elem->getY();
     if (esPosicionValida(x, y) && matriz[x][y] == nullptr) {
         matriz[x][y] = elem;
+        //insertar en la lista
+        Criatura* c = dynamic_cast<Criatura*>(elem);
+        if (c != nullptr) {
+            listaC->insertar(c);
+        }
     }
     else {
         //excepcion
@@ -84,8 +91,16 @@ void Entorno::llenarAleatoriamente() {
 
 void Entorno::eliminarElemento(int x, int y) {
     if (esPosicionValida(x, y) && matriz[x][y] != nullptr) {
-        delete matriz[x][y];
-        matriz[x][y] = nullptr;
+        Elemento* e = matriz[x][y];
+        if (e != nullptr) {
+            Criatura* c = dynamic_cast<Criatura*>(e);
+            if (c != nullptr) {
+                //elimino la criatura de la lista
+                listaC->eliminar(c);
+            }
+            delete e;
+            matriz[x][y] = nullptr;
+        }
     }
 }
 
@@ -135,3 +150,5 @@ void Entorno::limpiar() {
         }
     }
 }
+
+

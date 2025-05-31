@@ -3,6 +3,8 @@
 class Planta : public Recurso
 {
 public:
-	Planta(int x = 0, int y = 0, int energia = 50);
+	Planta(int x, int y, int energiaInicial = 40);
+	void reducirEnergia() override;
+	int getNivelDeEnergia() const override;
 	string tipo()override;
 };

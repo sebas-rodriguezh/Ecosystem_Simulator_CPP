@@ -1,12 +1,12 @@
 #pragma once
 #include "Elemento.h"
-
+#include "ListaCriatura.h"
 class Entorno {
 private:
     int filas;
     int columnas;
     Elemento*** matriz; // Matriz dinámica de punteros a Elemento
-
+    ListaCriatura* listaC;
     static Entorno* instancia;//singleton
     Entorno(int filas, int columnas);
 
@@ -25,6 +25,7 @@ public:
     // void moverTodasLasCriaturasAleatoriamente();
 
     void imprimir() const;
-    void limpiar();
+    void limpiar(); 
+     
 
 };

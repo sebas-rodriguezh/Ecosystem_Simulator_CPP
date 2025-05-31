@@ -1,7 +1,7 @@
 #include "Elemento.h"
 
 
-Elemento::Elemento(int xAux, int yAux) : x(xAux), y(xAux)
+Elemento::Elemento(int xAux, int yAux) : x(xAux), y(yAux) 
 {
 
 }
