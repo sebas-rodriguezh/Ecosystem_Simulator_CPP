@@ -7,5 +7,5 @@ Omnivoro::Omnivoro(int xAux, int yAux, int ed, int nEnergia) :
 
 }
 string Omnivoro::tipo() {
-	return "O";
+	return "Omnivoro";
 }

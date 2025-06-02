@@ -11,4 +11,5 @@ public:
     static Elemento* crearAleatorio(int x, int y);
     static Elemento* crearRecursoAleatorio(int x, int y);
     static Elemento* crearCriaturaAleatorio(int x, int y);
+    static Elemento* crearRecursoDeTipo(string tipo, int x, int y);
 };

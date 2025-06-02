@@ -41,5 +41,8 @@ public:
 	
 	void setPos(int x, int y);
 
+	bool puedeConsumir(Recurso* recursoConsumir);
+	bool puedeReproducirseCon(Criatura* otraCriatura);
+
 	virtual string tipo()=0;
 };

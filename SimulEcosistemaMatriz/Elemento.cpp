@@ -1,7 +1,7 @@
 #include "Elemento.h"
 
 
-Elemento::Elemento(int xAux, int yAux) : x(xAux), y(yAux) 
+Elemento::Elemento(int xAux, int yAux) : x(xAux), y(yAux)
 {
 
 }
@@ -18,16 +18,16 @@ void Elemento::setY(int yAux) {
 	this->y = yAux;
 }
 
-	void Elemento::setPosicion(int xNew, int yNew) {
-		x = xNew;
-		y = yNew;
-	}
+void Elemento::setPosicion(int xNew, int yNew) {
+	x = xNew;
+	y = yNew;
+}
 
 
-	int Elemento::getX() {
-		return x;
-	}
+int Elemento::getX() {
+	return x;
+}
 
-	int Elemento::getY() {
-		return y;
-	}
+int Elemento::getY() {
+	return y;
+}

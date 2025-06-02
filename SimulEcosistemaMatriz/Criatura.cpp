@@ -3,8 +3,12 @@
 
 
 Criatura::Criatura(int xAux, int yAux, int ed, int nEnergia)
-	:Elemento(xAux, yAux), edad(ed), nivelDeEnergia(nEnergia),
-	estrategiaMovimiento(nullptr), estrategiaAlimentacion(nullptr), estrategiaReproduccion(nullptr) {
+	: Elemento(xAux, yAux),
+	edad(ed),
+	nivelDeEnergia(nEnergia),
+	estrategiaMovimiento(nullptr),
+	estrategiaAlimentacion(nullptr),
+	estrategiaReproduccion(nullptr) {
 }
 
 
@@ -48,18 +52,18 @@ void Criatura::alimentar(Recurso* r) {
 }
 
 pair<int, int> Criatura::mover() {
-	if (estrategiaMovimiento) { 
-		return estrategiaMovimiento->calcularMovimiento(this); 
+	if (estrategiaMovimiento) {
+		return estrategiaMovimiento->calcularMovimiento(this);
 	}
-		return { x, y }; // Si no hay estrategia, se queda en la misma posición 
+	return { x, y }; // Si no hay estrategia, se queda en la misma posición 
 }
 
 
 Criatura* Criatura::reproducir(Criatura* c1, Criatura* c2) {
 	if (estrategiaReproduccion) {
-		return estrategiaReproduccion->reproducirConLaPareja(c1, c2); 
+		return estrategiaReproduccion->reproducirConLaPareja(c1, c2);
 	}
-	return nullptr; 
+	return nullptr;
 }
 
 
@@ -67,5 +71,17 @@ void Criatura::setPos(int x, int y) {
 
 	Elemento::setPosicion(x, y);
 }
+
+bool Criatura::puedeConsumir(Recurso* recursoConsumir) {
+	if (estrategiaAlimentacion == nullptr) return false;
+	return estrategiaAlimentacion->puedeConsumir(this, recursoConsumir);
+}
+
+
+bool Criatura::puedeReproducirseCon(Criatura* otraCriatura) {
+	if (estrategiaReproduccion == nullptr) return false;
+	return estrategiaReproduccion->puedeReproducirseCon(this, otraCriatura);
+}
+
 
 

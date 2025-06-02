@@ -11,7 +11,7 @@ protected:
 	int y;
 	//Coordenadas del Elemento, ya que siempre estara en la matriz. 
 public:
-	Elemento(int xAux = 0, int yAux = 0);
+	Elemento(int xAux, int yAux);
 	virtual ~Elemento();
 
 	void setX(int xAux);

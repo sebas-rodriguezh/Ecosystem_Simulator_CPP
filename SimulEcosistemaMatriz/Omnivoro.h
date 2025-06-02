@@ -4,6 +4,6 @@
 class Omnivoro : public Criatura
 {
 public:
-	Omnivoro(int xAux = 0, int yAux = 0, int ed = 0, int nEnergia = 75);
+	Omnivoro(int xAux, int yAux, int ed = 1, int nEnergia = 75);
 	string tipo() override;
 };
