@@ -7,67 +7,94 @@
 #include "Criatura.h"
 #include "MovimientoAleatorio.h"
 
+
 int main() {
     srand(static_cast<unsigned>(time(nullptr)));
 
     Entorno* entorno = Entorno::getInstancia(10, 10);
+    FabricaCriaturas f;
+
+
+    //Criatura* omnivoro2 = f.crear("Omnivoro", 5, 6); 
+    //Criatura* omnivoro3 = f.crear("Omnivoro", 6, 5); 
+
+
+
+    //Elemento* recurso1Planta = new Planta(4, 0, 13);
+    //Elemento* recurso2Planta = new Planta(4, 7, 13);
+    //Elemento* recurso3Planta = new Planta(7, 7, 13);
+    //Elemento* recurso12Carne = new Carne(5, 3,17); 
+    //Elemento* recurso22Carne = new Carne(5, 7,17); 
+    //Elemento* recurso32Carne = new Carne(6, 4,17); 
+
+    //Elemento* plantaOm = new Planta(0, 2, 13);
+    //Elemento* CarneOn = new Carne(2, 1, 17);
+
+
+    //entorno->agregarElemento(omnivoro3);
+    //entorno->agregarElemento(omnivoro2);
+    //entorno->agregarElemento(plantaOm);
+    //entorno->agregarElemento(CarneOn);
+
+    //entorno->agregarElemento(recurso1Planta);
+    //entorno->agregarElemento(recurso12Carne);
+    //entorno->agregarElemento(recurso22Carne);
+    //entorno->agregarElemento(recurso32Carne);
+    //entorno->agregarElemento(recurso2Planta);
+    //entorno->agregarElemento(recurso3Planta);
+
+    //int i = 0;
+    //while (true) {
+    //    cout << "\nIteracion: " << i << endl;
+    //    entorno->imprimir();
+
+    //    // Mover la criatura una sola vez por iteración usando moverCriaturaV2
+    //    bool sigueViva = entorno->moverCriaturaV2(omnivoro2, true); // true para generar recurso al morir
+
+    //    cout << "\nDespues de mover mi criatura:" << endl;
+    //    entorno->imprimir();
+
+    //    if (!sigueViva) {
+    //        cout << "La criatura ha muerto. Fin de simulacion." << endl;
+    //        omnivoro2 = nullptr; // Importante!
+    //        break;
+    //    }
+
+    //    cout << "\nInformacion del Carnivoro:" << endl;
+    //    cout << "Edad: " << omnivoro2->getEdad()
+    //        << " - Energia: " << omnivoro2->getNivelDeEnergia() << endl;
+
+    //    i++;
+    //}
+
+
     entorno->llenarAleatoriamente();
 
-    std::cout << "Estado inicial del entorno:\n";
-    entorno->imprimir(); 
+    // Obtener criaturas existentes en el entorno
+    int maxIteraciones = 50;
+    for (int i = 0; i < maxIteraciones; ++i) {
+        auto criaturas = entorno->obtenerSTLCriaturas();  // 5. Obtener lista fresca cada iteración
 
-    // Ejemplo mover un elemento de (0,0) a (1,1) 
-    entorno->moverElemento(0, 0, 1, 1); 
+        if (criaturas.empty()) {
+            cout << "No hay mas criaturas vivas. Simulacion terminada." << endl;
+            break;
+        }
 
-    std::cout << "\nEstado después de mover elemento de (0,0) a (1,1):\n";
-    entorno->imprimir(); 
+        cout << "\n--- Iteracion " << i << " ---" << endl;
+        entorno->imprimir();
 
-    entorno->limpiar(); 
+        // 6. Usar remove_if para mayor claridad
+        criaturas.erase(remove_if(criaturas.begin(), criaturas.end(),
+            [entorno](Criatura* c) {
+                return !entorno->moverCriaturaV2(c, true);
+            }),
+            criaturas.end());
 
-
-    Planta* recurso1 = new Planta(0, 0, 50);  
-    FabricaCriaturas f; 
-    Criatura* herbi = f.crear("Herbivoro", 0, 0); 
-   // Herbivoro* herbi = new Herbivoro(0, 0,4, 20); 
-    if (Herbivoro* h = dynamic_cast<Herbivoro*>(herbi)) {
-        h->alimentar(recurso1);
+        cout << "\nDespues de mover:" << endl;
+        entorno->imprimir();
+        cout << "Criaturas vivas: " << criaturas.size() << endl;
     }
 
-    //srand(time(nullptr));  // Inicializa el generador de números aleatorios
 
-    // Crear una criatura base (puedes cambiar por Herbivoro/Carnivoro si ya los tenés)
-    Carnivoro* criatura = new Carnivoro(5, 5,9,90);  // Posición inicial (5,5)
-
-    // Asignar estrategia de movimiento aleatorio
-    criatura->setEstrategias(new MovimientoAleatorio(),nullptr,nullptr);
-
-    // Mostrar posición inicial
-    std::cout << "Posición inicial: (" << criatura->getX() << ", " << criatura->getY() << ")\n";
-
-    // Mover la criatura varias veces
-    for (int i = 0; i < 5; ++i) {
-        std::pair<int, int> nuevaPos = criatura->mover();
-        criatura->setX(nuevaPos.first);
-        criatura->setY(nuevaPos.second);
-        std::cout << "Movimiento " << i + 1 << ": (" << criatura->getX() << ", " << criatura->getY() << ")\n";
-    }
-
-    
-    Criatura* herbi2 = f.crear("Herbivoro", 0, 0);
-
-    herbi->reproducir(herbi, herbi2); 
-
-    Criatura* hijo = herbi->reproducir(herbi, herbi2);
-
-    if (hijo) {
-        cout << "Se creo un nuevo herbivoro. " << endl; 
-        cout << endl << hijo->tipo() << endl;
-    }
-    else {
-        cout << "No se creo. " << endl; 
-    }
-
-    delete hijo; 
-    delete criatura;
     return 0;
 }

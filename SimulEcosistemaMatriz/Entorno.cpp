@@ -15,7 +15,7 @@ Entorno::Entorno(int filas, int columnas) : filas(filas), columnas(columnas) {
             matriz[i][j] = nullptr;
         }
     }
-    listaC = new ListaCriatura();
+    //listaC = new ListaCriatura();
 }
 
 Entorno::~Entorno() {
@@ -26,7 +26,7 @@ Entorno::~Entorno() {
         delete[] matriz[i];
     }
     delete[] matriz;
-    delete listaC;
+    //delete listaC;
 }
 
 Entorno* Entorno::getInstancia(int filas, int columnas) {
@@ -51,10 +51,10 @@ void Entorno::agregarElemento(Elemento* elem) {
     if (esPosicionValida(x, y) && matriz[x][y] == nullptr) {
         matriz[x][y] = elem;
         //insertar en la lista
-        Criatura* c = dynamic_cast<Criatura*>(elem);
-        if (c != nullptr) {
-            listaC->insertar(c);
-        }
+        //Criatura* c = dynamic_cast<Criatura*>(elem);
+        //if (c != nullptr) {
+        //    listaC->insertar(c);
+        //}
     }
     else {
         //excepcion
@@ -93,11 +93,11 @@ void Entorno::eliminarElemento(int x, int y) {
     if (esPosicionValida(x, y) && matriz[x][y] != nullptr) {
         Elemento* e = matriz[x][y];
         if (e != nullptr) {
-            Criatura* c = dynamic_cast<Criatura*>(e);
-            if (c != nullptr) {
-                //elimino la criatura de la lista
-                listaC->eliminar(c);
-            }
+            //Criatura* c = dynamic_cast<Criatura*>(e);
+            //if (c != nullptr) {
+            //    //elimino la criatura de la lista
+            //    listaC->eliminar(c);
+            //}
             delete e;
             matriz[x][y] = nullptr;
         }
@@ -151,4 +151,142 @@ void Entorno::limpiar() {
     }
 }
 
+//Metodos nuevos despues del cambio.
 
+
+vector<Criatura*> Entorno::obtenerSTLCriaturas() {
+    vector<Criatura*> criaturas;
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            if (Criatura* c = dynamic_cast<Criatura*>(matriz[i][j])) {
+                criaturas.push_back(c);
+            }
+        }
+    }
+    return criaturas;
+}
+
+string Entorno::obtenerTipoRecursoParaCriatura(Criatura* c) {
+    if (dynamic_cast<Carnivoro*>(c)) {
+        return "Carne";
+    }
+    else if (dynamic_cast<Herbivoro*>(c)) {
+        return "Planta";
+    }
+    else if (dynamic_cast<Omnivoro*>(c)) {
+        return (rand() % 2 == 0) ? "Carne" : "Planta"; // 50% de probabilidad
+    }
+    return "Planta"; // Default
+}
+
+void Entorno::manejarMuerteCriatura(Criatura* c) {
+    string tipoRecurso = obtenerTipoRecursoParaCriatura(c);
+    int x = c->getX();
+    int y = c->getY();
+
+    // 1. Primero eliminar la criatura
+    eliminarElemento(x, y);  // Esto libera la posición
+
+    // 2. Luego agregar el recurso en la posición ahora vacía
+    if (Elemento* nuevoRecurso = FabricaElemento::crearRecursoDeTipo(tipoRecurso, x, y)) {
+        agregarElemento(nuevoRecurso);
+    }
+}
+
+
+bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
+    if (c == nullptr || c->getNivelDeEnergia() <= 0) {
+        if (c != nullptr && generarRecursoAlMorir) {
+            manejarMuerteCriatura(c); // Genera recurso y elimina
+        }
+        return false;
+    }
+
+    int xViejo = c->getX();
+    int yViejo = c->getY();
+    pair<int, int> nuevaPos = c->mover();
+
+    if (esPosicionValida(nuevaPos.first, nuevaPos.second)) {
+        Elemento* destino = getElemento(nuevaPos.first, nuevaPos.second);
+
+        if (matriz[nuevaPos.first][nuevaPos.second] == nullptr) {
+            c->setX(nuevaPos.first);
+            c->setY(nuevaPos.second);
+            this->moverElemento(xViejo, yViejo, c->getX(), c->getY());
+        }
+        else {
+            if (nuevaPos.first == c->getX() && nuevaPos.second == c->getY()) {
+                cout << "[" << c->tipo() << "] en (" << c->getX() << ", " << c->getY() << "): Se quedo quieto." << endl;
+            }
+            else {
+                if (Recurso* recursoPosible = dynamic_cast<Recurso*>(destino)) {
+                    if (c->puedeConsumir(recursoPosible)) {
+                        c->alimentar(recursoPosible);
+                        int xR = recursoPosible->getX();
+                        int yR = recursoPosible->getY();
+                        eliminarElemento(xR, yR);
+                        moverElemento(c->getX(), c->getY(), xR, yR);
+                    }
+                    else {
+                        cout << "[" << c->tipo() << "] en (" << c->getX() << ", " << c->getY() << "): No se pudo comer " << recursoPosible->tipo() << " en (" << recursoPosible->getX() << ", " << recursoPosible->getY() << "), porque NO es de su tipo de alimentacion." << endl;
+                    }
+                }
+                else if (Criatura* pareja = dynamic_cast<Criatura*>(destino)) {
+                    cout << "[" << c->tipo() << "] en (" << c->getX() << ", " << c->getY() << "): Encontro pareja [" << pareja->tipo() << "] en (" << pareja->getX() << ", " << pareja->getY() << ")" << endl;
+
+                    if (c->puedeReproducirseCon(pareja)) {
+                        Criatura* hijo = c->reproducir(c, pareja);
+                        hijo->setNivelDeEnergia((c->getNivelDeEnergia() + pareja->getNivelDeEnergia()) / 4);
+                        hijo->setEdad(1);
+
+                        for (int i = -1; i <= 1; i++) {
+                            for (int j = -1; j <= 1; j++) {
+                                int x = c->getX() + i;
+                                int y = c->getY() + j;
+                                if (esPosicionValida(x, y) && getElemento(x, y) == nullptr) {
+                                    hijo->setPos(x, y);
+                                    agregarElemento(hijo);
+                                    return true;
+                                }
+
+                                x = pareja->getX() + i;
+                                y = pareja->getY() + j;
+                                if (esPosicionValida(x, y) && getElemento(x, y) == nullptr) {
+                                    hijo->setPos(x, y);
+                                    agregarElemento(hijo);
+                                    return true;
+                                }
+                            }
+                        }
+
+                        for (int intentos = 0; intentos < 10; intentos++) {
+                            int x = rand() % filas;
+                            int y = rand() % columnas;
+                            if (getElemento(x, y) == nullptr) {
+                                hijo->setPos(x, y);
+                                agregarElemento(hijo);
+                                return true;
+                            }
+                        }
+
+                        delete hijo;
+                    }
+                    else {
+                        cout << "Pero no pudo reproducirse por NO ser del mismo tipo o alguno de los dos no tiene energia suficiente. " << endl;
+                    }
+                }
+            }
+        }
+    }
+
+    c->setEdad(c->getEdad() + 1);
+    c->setNivelDeEnergia(c->getNivelDeEnergia() - 10);
+
+    if (c->getNivelDeEnergia() <= 0 && generarRecursoAlMorir) {
+        manejarMuerteCriatura(c);
+        return false;
+    }
+
+    return c->getNivelDeEnergia() > 0; // Devuelve true si sigue viva
+
+}
