@@ -29,6 +29,7 @@ void AlimentacionO::alimentar(Criatura* c, Recurso* r) {
 
 
         cout << "[Alimentacion] Omnivoro comio Bistek y gano " << energia << " de energia\n";
+        cout << "Ahora el nivel de energia de la criatura es " << c->getNivelDeEnergia() << endl;
         return;
     }
 
