@@ -1,13 +1,12 @@
 #pragma once
 #include "Elemento.h"
-#include "ListaCriatura.h"
+#include "Criatura.h"
 #include <vector>
 class Entorno {
 private:
     int filas;
     int columnas;
     Elemento*** matriz; // Matriz dinámica de punteros a Elemento
-    //ListaCriatura* listaC;
     static Entorno* instancia;//singleton
     Entorno(int filas, int columnas);
 
@@ -34,5 +33,7 @@ public:
     string obtenerTipoRecursoParaCriatura(Criatura* c);
     void manejarMuerteCriatura(Criatura* c);
     vector<Criatura*> obtenerSTLCriaturas();
-
+    int contarRecursosDisponibles(); 
+    void degradarRecursos();
+    void iniciarSimulacionHastaQueTodasLasCriaturasMueran(); 
 };

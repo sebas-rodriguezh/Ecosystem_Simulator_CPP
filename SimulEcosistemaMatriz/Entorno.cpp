@@ -15,7 +15,7 @@ Entorno::Entorno(int filas, int columnas) : filas(filas), columnas(columnas) {
             matriz[i][j] = nullptr;
         }
     }
-    //listaC = new ListaCriatura();
+   
 }
 
 Entorno::~Entorno() {
@@ -26,7 +26,6 @@ Entorno::~Entorno() {
         delete[] matriz[i];
     }
     delete[] matriz;
-    //delete listaC;
 }
 
 Entorno* Entorno::getInstancia(int filas, int columnas) {
@@ -50,15 +49,10 @@ void Entorno::agregarElemento(Elemento* elem) {
     int y = elem->getY();
     if (esPosicionValida(x, y) && matriz[x][y] == nullptr) {
         matriz[x][y] = elem;
-        //insertar en la lista
-        //Criatura* c = dynamic_cast<Criatura*>(elem);
-        //if (c != nullptr) {
-        //    listaC->insertar(c);
-        //}
     }
     else {
         //excepcion
-        cout << "[Entorno] Error al agregar elemento en posición (" << x << ", " << y << ")\n";
+        cout << "[Entorno] Error al agregar elemento en posicion (" << x << ", " << y << ")\n";
     }
 }
 
@@ -93,11 +87,6 @@ void Entorno::eliminarElemento(int x, int y) {
     if (esPosicionValida(x, y) && matriz[x][y] != nullptr) {
         Elemento* e = matriz[x][y];
         if (e != nullptr) {
-            //Criatura* c = dynamic_cast<Criatura*>(e);
-            //if (c != nullptr) {
-            //    //elimino la criatura de la lista
-            //    listaC->eliminar(c);
-            //}
             delete e;
             matriz[x][y] = nullptr;
         }
@@ -152,6 +141,70 @@ void Entorno::limpiar() {
 }
 
 //Metodos nuevos despues del cambio.
+
+
+void Entorno::iniciarSimulacionHastaQueTodasLasCriaturasMueran() {
+    this->llenarAleatoriamente();
+
+    int maxIteraciones = 50;
+    for (int i = 0; i < maxIteraciones; ++i) {
+        auto criaturas = this->obtenerSTLCriaturas();
+
+        if (criaturas.empty()) {
+            cout << "No hay mas criaturas vivas. Simulacion terminada." << endl;
+            break;
+        }
+
+        cout << "\n--- Iteracion " << i << " ---" << endl;
+        this->imprimir();
+
+        this->degradarRecursos();
+
+        criaturas.erase(remove_if(criaturas.begin(), criaturas.end(),
+            [this](Criatura* c) {
+                return !this->moverCriaturaV2(c, true);
+            }),
+            criaturas.end());
+
+        cout << "\nDespues de mover:" << endl;
+        this->imprimir();
+        cout << "Criaturas vivas: " << criaturas.size() << endl;
+        cout << "Recursos restantes: " << this->contarRecursosDisponibles() << endl;
+    }
+}
+
+
+void Entorno::degradarRecursos() {
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            Elemento* elem = matriz[i][j];
+
+            if (Recurso* recurso = dynamic_cast<Recurso*>(elem)) {
+                recurso->reducirEnergia();
+
+                if (recurso->getNivelDeEnergia() <= 0) {
+                    cout << "[" << recurso->tipo() << "] Recurso en (" << i << ", " << j << ") murio por agotamiento.\n"; 
+                    eliminarElemento(i, j);
+                }
+            }
+        }
+    }
+}
+
+
+int Entorno::contarRecursosDisponibles() 
+{
+    int count = 0;
+    for (int i = 0; i < filas; ++i) {
+        for (int j = 0; j < columnas; ++j) {
+            if (dynamic_cast<Recurso*>(matriz[i][j])) {
+                ++count;
+            }
+        }
+    }
+    return count;
+}
+
 
 
 vector<Criatura*> Entorno::obtenerSTLCriaturas() {

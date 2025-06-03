@@ -13,7 +13,7 @@ void AlimentacionC::alimentar(Criatura* c, Recurso* r) {
             c->setNivelDeEnergia(100);
         }
 
-        cout << "[Alimentacion] Carnivoro comio carne y gano " << energia << " de energia\n";
+        cout << "[Alimentacion] Carnivoro comio Bistek y gano " << energia << " de energia\n";
         cout << "Ahora el nivel de energia de la criatura es " << c->getNivelDeEnergia() << endl;
     }
     else {
@@ -22,5 +22,5 @@ void AlimentacionC::alimentar(Criatura* c, Recurso* r) {
 }
 
 bool AlimentacionC::puedeConsumir(Criatura* criatura, Recurso* recurso) {
-    return (recurso->tipo() == "X");
+    return (recurso->tipo() == "Bistek");
 }

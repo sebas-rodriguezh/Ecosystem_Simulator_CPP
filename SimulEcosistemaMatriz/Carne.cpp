@@ -2,8 +2,10 @@
 
 Carne::Carne(int x, int y, int energia) : Recurso(x, y, energia) {}
 
-void Carne::reducirEnergia() {
-    consumir(25);
+void Carne::reducirEnergia() 
+{
+    int valorConsumido = rand() % 10;
+    consumir(valorConsumido);
 }
 
 int Carne::getNivelDeEnergia() const {
@@ -11,5 +13,5 @@ int Carne::getNivelDeEnergia() const {
 }
 
 string Carne::tipo() {
-	return "X";
+	return "Bistek";
 }

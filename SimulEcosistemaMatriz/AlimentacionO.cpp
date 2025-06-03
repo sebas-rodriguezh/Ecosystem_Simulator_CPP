@@ -28,7 +28,7 @@ void AlimentacionO::alimentar(Criatura* c, Recurso* r) {
         }
 
 
-        cout << "[Alimentacion] Omnivoro comio carne y gano " << energia << " de energia\n";
+        cout << "[Alimentacion] Omnivoro comio Bistek y gano " << energia << " de energia\n";
         return;
     }
 
@@ -37,5 +37,5 @@ void AlimentacionO::alimentar(Criatura* c, Recurso* r) {
 
 
 bool AlimentacionO::puedeConsumir(Criatura* criatura, Recurso* recurso) {
-    return (recurso->tipo() == "Planta" || recurso->tipo() == "X");
+    return (recurso->tipo() == "Planta" || recurso->tipo() == "Bistek");
 }

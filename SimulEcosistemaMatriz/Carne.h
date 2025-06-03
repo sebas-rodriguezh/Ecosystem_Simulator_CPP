@@ -1,5 +1,6 @@
 #pragma once
 #include "Recurso.h"
+#include <cstdlib>  // rand() para numeros aleatorios 
 class Carne : public Recurso
 {
 public:
@@ -8,4 +9,6 @@ public:
 	int getNivelDeEnergia() const override;
 	string tipo() override;
 
-};
+}; 
+
+	
