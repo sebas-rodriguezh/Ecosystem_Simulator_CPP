@@ -115,19 +115,45 @@ void Entorno::moverElemento(int xOrig, int yOrig, int xDest, int yDest) {
 
 
 
+//void Entorno::imprimir() const {
+//    for (int i = 0; i < filas; i++) {
+//        for (int j = 0; j < columnas; j++) {
+//            if (matriz[i][j] != nullptr) {
+//                std::cout << matriz[i][j]->tipo()[0] << " ";
+//            }
+//            else {
+//                cout << ". ";
+//            }
+//        }
+//        cout << "\n";
+//    }
+//}
+
+
 void Entorno::imprimir() const {
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
+    // Encabezado de columnas (números)
+    cout << "   ";
+    for (int j = 0; j < columnas; ++j) {
+        cout << " " << j << " ";  // Columnas numeradas
+    }
+    cout << "\n";
+
+    // Matriz con coordenadas de fila
+    for (int i = 0; i < filas; ++i) {
+        cout << i << " ";  // Número de fila al inicio
+
+        for (int j = 0; j < columnas; ++j) {
             if (matriz[i][j] != nullptr) {
-                std::cout << matriz[i][j]->tipo()[0] << " ";
+                cout << " " << matriz[i][j]->tipo()[0] << " "; // Solo primera letra
             }
             else {
-                cout << ". ";
+                cout << " . ";  // Punto para celdas vacías
             }
         }
-        cout << "\n";
+        cout << "\n";  // Salto de línea después de cada fila
     }
 }
+
 
 void Entorno::limpiar() {
     for (int i = 0; i < filas; i++) {
@@ -325,7 +351,18 @@ bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
                         delete hijo;
                     }
                     else {
-                        cout << "Pero no pudo reproducirse por NO ser del mismo tipo o alguno de los dos no tiene energia suficiente. " << endl;
+                        if (c->tipo() == pareja->tipo()) 
+                        {
+                            cout << "No se pueden reproducir por niveles de energia de los padres: " << endl;         
+                            cout << "Padre 1: " << c->getNivelDeEnergia() << endl; 
+                            cout << "Padre 2: " << pareja->getNivelDeEnergia() << endl;
+                        }
+                        else {
+                            cout << "No pudo reproducirse por NO ser de la misma especie. " << endl; 
+                        }
+
+
+                       
                     }
                 }
             }

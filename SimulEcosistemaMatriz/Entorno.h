@@ -2,6 +2,7 @@
 #include "Elemento.h"
 #include "Criatura.h"
 #include <vector>
+#include <iomanip>
 class Entorno {
 private:
     int filas;
