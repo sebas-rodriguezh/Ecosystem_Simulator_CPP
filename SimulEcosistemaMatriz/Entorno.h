@@ -3,9 +3,12 @@
 #include "Criatura.h"
 #include <vector>
 #include <iomanip>
+#include <thread>
+
 
 class Entorno {
 private:
+    string clima;
     int filas;
     int columnas;
     Elemento*** matriz; 
@@ -45,5 +48,4 @@ public:
     vector<Criatura*> obtenerSTLCriaturas();
     int contarRecursosDisponibles(); 
     string degradarRecursos();
-  
 };

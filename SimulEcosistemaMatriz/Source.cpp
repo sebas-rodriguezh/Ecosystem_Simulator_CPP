@@ -1,25 +1,28 @@
-
+#include <thread>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include "Entorno.h"
-#include "FabricaElemento.h"
-#include "Criatura.h"
-#include "MovimientoAleatorio.h"
 
+
+void iniciarSimulacion();
 
 int main() {
-    srand(static_cast<unsigned>(time(nullptr)));
+    iniciarSimulacion(); 
+    return 0;
+}
 
+
+void iniciarSimulacion() {
+    srand(static_cast<unsigned>(time(nullptr)));
     Entorno* entorno = Entorno::getInstancia(10, 10);
-    FabricaCriaturas f;
 
 
     entorno->llenarAleatoriamente();
 
     int maxIteraciones = 50;
     for (int i = 0; i < maxIteraciones; ++i) {
-        entorno->limpiarMensajes(); 
+        entorno->limpiarMensajes();
 
         auto criaturas = entorno->obtenerSTLCriaturas();
 
@@ -28,7 +31,7 @@ int main() {
             break;
         }
 
-        cout << "\n--- Iteracion " << i << " ---" << endl;
+        cout << endl << "--- Iteracion " << i << " ---" << endl;
         cout << entorno->imprimir() << endl;
 
         cout << entorno->degradarRecursos() << endl;
@@ -39,17 +42,18 @@ int main() {
             }),
             criaturas.end());
 
-        cout << "\nEventos en esta iteracion:" << endl;
+        cout << endl << "Eventos en esta iteracion:" << endl;
         for (const auto& msg : entorno->obtenerMensajes()) {
             cout << "> " << msg << endl;
         }
 
-        cout << "\nDespues de mover:" << endl;
+        cout << endl << "Despues de mover:" << endl;
         cout << entorno->imprimir() << endl;
         cout << "Criaturas vivas: " << criaturas.size() << endl;
         cout << "Recursos restantes: " << entorno->contarRecursosDisponibles() << endl;
+
+        this_thread::sleep_for(chrono::seconds(5));
+
     }
 
-
-    return 0;
 }

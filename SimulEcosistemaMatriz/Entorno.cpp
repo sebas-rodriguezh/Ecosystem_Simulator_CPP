@@ -5,7 +5,7 @@
 Entorno* Entorno::instancia = nullptr;
 
 Entorno::Entorno(int filas, int columnas) : filas(filas), columnas(columnas) {
-    // Crear matriz dinámica
+    // Crear mssssatriz dinámica
     //puro legner progra1
     matriz = new Elemento * *[filas];
     for (int i = 0; i < filas; i++) {
@@ -13,6 +13,14 @@ Entorno::Entorno(int filas, int columnas) : filas(filas), columnas(columnas) {
         for (int j = 0; j < columnas; j++) {
             matriz[i][j] = nullptr;
         }
+    }
+    int tipoClim = rand() % 2;
+    if (tipoClim == 0) 
+    {
+        clima = "Lluvioso";
+    }
+    else if (tipoClim == 1) {
+        clima = "Soleado";
     }
    
 }
@@ -54,7 +62,15 @@ void Entorno::agregarElemento(Elemento* elem) {
 void Entorno::llenarAleatoriamente() {
     int totalCeldas = filas * columnas;
     int cantidadCriaturas = totalCeldas * 0.10;
-    int cantidadRecursos = totalCeldas * 0.10;
+    int cantidadRecursos = 0;
+
+    if (clima == "Soleado") {
+        cantidadRecursos = totalCeldas * 0.16;
+    }
+    else {
+        cantidadRecursos = totalCeldas * 0.10;
+    }
+
 
     int colocadas = 0;
     while (colocadas < cantidadCriaturas) {
@@ -149,7 +165,7 @@ string Entorno::moverElemento(int xOrig, int yOrig, int xDest, int yDest)
 
 string Entorno::imprimir() const {
     stringstream s; 
-
+    s << "Clima: " << clima << endl; 
     s << "   ";
     for (int j = 0; j < columnas; ++j) {
         s << " " << j << " ";  // Columnas numeradas
@@ -199,7 +215,7 @@ string Entorno::degradarRecursos() {
 
             if (Recurso* recurso = dynamic_cast<Recurso*>(elem)) 
             {
-                if (this->hayAguaAlredorDelRecurso(recurso)) 
+                if (this->hayAguaAlredorDelRecurso(recurso))
                 {
                     recurso->reducirEnergiaPeroConAguaAlrededor();
                 }
@@ -387,3 +403,4 @@ bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
     return c->getNivelDeEnergia() > 0; 
 
 }
+
