@@ -45,9 +45,9 @@ int Criatura::getNivelDeEnergia() {
 	return nivelDeEnergia;
 }
 
-void Criatura::alimentar(Recurso* r) {
+string Criatura::alimentar(Recurso* r) {
 	if (estrategiaAlimentacion) {
-		estrategiaAlimentacion->alimentar(this, r);
+		return estrategiaAlimentacion->alimentar(this, r);
 	}
 }
 

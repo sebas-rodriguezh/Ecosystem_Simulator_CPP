@@ -35,7 +35,7 @@ public:
 	//metodos
 	void incrementarEdad();
 
-	void alimentar(Recurso* r);
+	string alimentar(Recurso* r);
 	pair<int, int> mover(); 
 	Criatura* reproducir(Criatura* c1,Criatura* c2); 
 	

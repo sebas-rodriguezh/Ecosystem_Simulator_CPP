@@ -3,7 +3,10 @@
 #include "Criatura.h"
 #include "Carne.h"
 
-void AlimentacionC::alimentar(Criatura* c, Recurso* r) {
+string AlimentacionC::alimentar(Criatura* c, Recurso* r) 
+{
+    stringstream s; 
+
     Carne* carne = dynamic_cast<Carne*>(r);
     if (carne != nullptr) {
         int energia = carne->getEnergiaDisponible();
@@ -13,12 +16,13 @@ void AlimentacionC::alimentar(Criatura* c, Recurso* r) {
             c->setNivelDeEnergia(100);
         }
 
-        cout << "[Alimentacion] Carnivoro comio Bistek y gano " << energia << " de energia\n";
-        cout << "Ahora el nivel de energia de la criatura es " << c->getNivelDeEnergia() << endl;
+        s << "[Alimentacion] Carnivoro comio Bistek y gano " << energia << " de energia\n";
+        s << "Ahora el nivel de energia de la criatura es " << c->getNivelDeEnergia() << endl;
     }
     else {
-        cout << "[Alimentacion] No hay carne para comer\n";
+        s << "[Alimentacion] No hay carne para comer\n";
     }
+    return s.str(); 
 }
 
 bool AlimentacionC::puedeConsumir(Criatura* criatura, Recurso* recurso) {

@@ -7,7 +7,9 @@
 #include <iostream>
 using namespace std;
 
-void AlimentacionH::alimentar(Criatura* c, Recurso* r) {
+string AlimentacionH::alimentar(Criatura* c, Recurso* r) 
+{
+    stringstream s; 
     Planta* planta = dynamic_cast<Planta*>(r);
     if (planta != nullptr) {
         int energia = planta->getEnergiaDisponible();
@@ -18,12 +20,13 @@ void AlimentacionH::alimentar(Criatura* c, Recurso* r) {
         }
 
 
-        cout << "[Alimentacion] Herbivoro comio planta y gano " << energia << " de energia\n";
-        cout << "Ahora el nivel de energia de la criatura es " << c->getNivelDeEnergia() << endl;
+        s << "[Alimentacion] Herbivoro comio planta y gano " << energia << " de energia\n";
+        s << "Ahora el nivel de energia de la criatura es " << c->getNivelDeEnergia() << endl;
     }
     else {
-        cout << "[Alimentacion] No hay planta para comer\n";
+        s << "[Alimentacion] No hay planta para comer\n";
     }
+    return s.str();
 }
 
 bool AlimentacionH::puedeConsumir(Criatura* criatura, Recurso* recurso) {

@@ -1,5 +1,4 @@
 #include "Entorno.h"
-#include "Entorno.h"
 #include "FabricaElemento.h"
 #include <iostream>
 
@@ -50,10 +49,6 @@ void Entorno::agregarElemento(Elemento* elem) {
     if (esPosicionValida(x, y) && matriz[x][y] == nullptr) {
         matriz[x][y] = elem;
     }
-    else {
-        //excepcion
-        cout << "[Entorno] Error al agregar elemento en posicion (" << x << ", " << y << ")\n";
-    }
 }
 
 void Entorno::llenarAleatoriamente() {
@@ -93,23 +88,40 @@ void Entorno::eliminarElemento(int x, int y) {
     }
 }
 
-void Entorno::moverElemento(int xOrig, int yOrig, int xDest, int yDest) {
+void Entorno::limpiarMensajes() {
+    mensajes.clear(); 
+}
+
+const vector<string>& Entorno::obtenerMensajes() const {
+    return mensajes;
+}
+void Entorno::agregarMensaje(string mensaje) {
+    mensajes.push_back(mensaje);
+}
+
+
+string Entorno::moverElemento(int xOrig, int yOrig, int xDest, int yDest) 
+{
+    stringstream s; 
+
     if (!esPosicionValida(xOrig, yOrig) || !esPosicionValida(xDest, yDest)) {
-        cout << "[Entorno] Movimiento fuera de rango\n";
-        return;
+        s << "[Entorno] Movimiento fuera de rango\n";
+        return s.str();
     }
     if (matriz[xOrig][yOrig] == nullptr) {
-        cout << "[Entorno] No hay elemento en la posición origen (" << xOrig << ", " << yOrig << ")\n";
-        return;
+        s << "[Entorno] No hay elemento en la posición origen (" << xOrig << ", " << yOrig << ")\n";
+        return s.str();
     }
     if (matriz[xDest][yDest] != nullptr) {
-        cout << "[Entorno] Posición destino ocupada (" << xDest << ", " << yDest << ")\n";
-        return;
+        s << "[Entorno] Posición destino ocupada (" << xDest << ", " << yDest << ")\n";
+        return s.str();
     }
-    cout << "[Entorno] Moviendo elemento de (" << xOrig << ", " << yOrig << ") a (" << xDest << ", " << yDest << ")\n";
+    s << "[Entorno] Moviendo elemento de (" << xOrig << ", " << yOrig << ") a (" << xDest << ", " << yDest << ")\n";
     matriz[xDest][yDest] = matriz[xOrig][yOrig];
     matriz[xOrig][yOrig] = nullptr;
     matriz[xDest][yDest]->setPosicion(xDest, yDest);
+
+    return s.str(); 
 }
 
 
@@ -130,28 +142,31 @@ void Entorno::moverElemento(int xOrig, int yOrig, int xDest, int yDest) {
 //}
 
 
-void Entorno::imprimir() const {
-    // Encabezado de columnas (números)
-    cout << "   ";
+string Entorno::imprimir() const {
+    stringstream s; 
+
+    s << "   ";
     for (int j = 0; j < columnas; ++j) {
-        cout << " " << j << " ";  // Columnas numeradas
+        s << " " << j << " ";  // Columnas numeradas
     }
-    cout << "\n";
+    s << "\n";
 
     // Matriz con coordenadas de fila
     for (int i = 0; i < filas; ++i) {
-        cout << i << " ";  // Número de fila al inicio
+        s << i << " ";  // Número de fila al inicio
 
         for (int j = 0; j < columnas; ++j) {
             if (matriz[i][j] != nullptr) {
-                cout << " " << matriz[i][j]->tipo()[0] << " "; // Solo primera letra
+                s << " " << matriz[i][j]->tipo()[0] << " "; // Solo primera letra
             }
             else {
-                cout << " . ";  // Punto para celdas vacías
+                s << " . ";  // Punto para celdas vacías
             }
         }
-        cout << "\n";  // Salto de línea después de cada fila
+        s << "\n";  // Salto de línea después de cada fila
     }
+
+    return s.str(); 
 }
 
 
@@ -169,38 +184,10 @@ void Entorno::limpiar() {
 //Metodos nuevos despues del cambio.
 
 
-void Entorno::iniciarSimulacionHastaQueTodasLasCriaturasMueran() {
-    this->llenarAleatoriamente();
 
-    int maxIteraciones = 50;
-    for (int i = 0; i < maxIteraciones; ++i) {
-        auto criaturas = this->obtenerSTLCriaturas();
+string Entorno::degradarRecursos() {
+    stringstream s; 
 
-        if (criaturas.empty()) {
-            cout << "No hay mas criaturas vivas. Simulacion terminada." << endl;
-            break;
-        }
-
-        cout << "\n--- Iteracion " << i << " ---" << endl;
-        this->imprimir();
-
-        this->degradarRecursos();
-
-        criaturas.erase(remove_if(criaturas.begin(), criaturas.end(),
-            [this](Criatura* c) {
-                return !this->moverCriaturaV2(c, true);
-            }),
-            criaturas.end());
-
-        cout << "\nDespues de mover:" << endl;
-        this->imprimir();
-        cout << "Criaturas vivas: " << criaturas.size() << endl;
-        cout << "Recursos restantes: " << this->contarRecursosDisponibles() << endl;
-    }
-}
-
-
-void Entorno::degradarRecursos() {
     for (int i = 0; i < filas; i++) {
         for (int j = 0; j < columnas; j++) {
             Elemento* elem = matriz[i][j];
@@ -209,12 +196,13 @@ void Entorno::degradarRecursos() {
                 recurso->reducirEnergia();
 
                 if (recurso->getNivelDeEnergia() <= 0) {
-                    cout << "[" << recurso->tipo() << "] Recurso en (" << i << ", " << j << ") murio por agotamiento.\n"; 
+                    s << "[" << recurso->tipo() << "] Recurso en (" << i << ", " << j << ") murio por agotamiento.\n"; 
                     eliminarElemento(i, j);
                 }
             }
         }
     }
+    return s.str();
 }
 
 
@@ -276,6 +264,7 @@ void Entorno::manejarMuerteCriatura(Criatura* c) {
 bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
     if (c == nullptr || c->getNivelDeEnergia() <= 0) {
         if (c != nullptr && generarRecursoAlMorir) {
+            agregarMensaje("["+c->tipo()+"] en ("+to_string(c->getX())+", "+ to_string(c->getY())+") murio por falta de energia y genero recurso.");
             manejarMuerteCriatura(c); // Genera recurso y elimina
         }
         return false;
@@ -291,27 +280,32 @@ bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
         if (matriz[nuevaPos.first][nuevaPos.second] == nullptr) {
             c->setX(nuevaPos.first);
             c->setY(nuevaPos.second);
-            this->moverElemento(xViejo, yViejo, c->getX(), c->getY());
+
+            this->agregarMensaje(this->moverElemento(xViejo, yViejo, c->getX(), c->getY()));
+       
         }
         else {
             if (nuevaPos.first == c->getX() && nuevaPos.second == c->getY()) {
-                cout << "[" << c->tipo() << "] en (" << c->getX() << ", " << c->getY() << "): Se quedo quieto." << endl;
+                
+                this->agregarMensaje("[" + c->tipo() + "] en (" + to_string(c->getX()) + ", " + to_string(c->getY()) + "): Se quedo quieto.");
+                   
             }
             else {
                 if (Recurso* recursoPosible = dynamic_cast<Recurso*>(destino)) {
                     if (c->puedeConsumir(recursoPosible)) {
-                        c->alimentar(recursoPosible);
+                        this->agregarMensaje(c->alimentar(recursoPosible));
                         int xR = recursoPosible->getX();
                         int yR = recursoPosible->getY();
                         eliminarElemento(xR, yR);
-                        moverElemento(c->getX(), c->getY(), xR, yR);
+                        this->agregarMensaje(moverElemento(c->getX(), c->getY(), xR, yR));
                     }
                     else {
-                        cout << "[" << c->tipo() << "] en (" << c->getX() << ", " << c->getY() << "): No se pudo comer " << recursoPosible->tipo() << " en (" << recursoPosible->getX() << ", " << recursoPosible->getY() << "), porque NO es de su tipo de alimentacion." << endl;
+                        agregarMensaje("[" + c->tipo() + "] en (" + to_string(c->getX()) + ", " + to_string(c->getY()) + "): No pudo comer " + recursoPosible->tipo() + " en (" + to_string(recursoPosible->getX()) + ", " + to_string(recursoPosible->getY()) + "), porque NO es de su tipo de alimentacion.");
                     }
                 }
                 else if (Criatura* pareja = dynamic_cast<Criatura*>(destino)) {
-                    cout << "[" << c->tipo() << "] en (" << c->getX() << ", " << c->getY() << "): Encontro pareja [" << pareja->tipo() << "] en (" << pareja->getX() << ", " << pareja->getY() << ")" << endl;
+                    agregarMensaje("[" + c->tipo() + "] en (" + to_string(c->getX()) + ", " + to_string(c->getY()) + "): Encontro pareja [" + pareja->tipo() + "] en (" + to_string(pareja->getX()) + ", " + to_string(pareja->getY()) + ")");
+
 
                     if (c->puedeReproducirseCon(pareja)) {
                         Criatura* hijo = c->reproducir(c, pareja);
@@ -353,12 +347,12 @@ bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
                     else {
                         if (c->tipo() == pareja->tipo()) 
                         {
-                            cout << "No se pueden reproducir por niveles de energia de los padres: " << endl;         
-                            cout << "Padre 1: " << c->getNivelDeEnergia() << endl; 
-                            cout << "Padre 2: " << pareja->getNivelDeEnergia() << endl;
+                            agregarMensaje("No se pueden reproducir por niveles de energia de los padres:");
+                            agregarMensaje("Padre 1: " + to_string(c->getNivelDeEnergia()));
+                            agregarMensaje("Padre 2: " + to_string(pareja->getNivelDeEnergia()));
                         }
                         else {
-                            cout << "No pudo reproducirse por NO ser de la misma especie. " << endl; 
+                            agregarMensaje("No pudo reproducirse por NO ser de la misma especie.");
                         }
 
 
@@ -373,10 +367,11 @@ bool Entorno::moverCriaturaV2(Criatura* c, bool generarRecursoAlMorir) {
     c->setNivelDeEnergia(c->getNivelDeEnergia() - 10);
 
     if (c->getNivelDeEnergia() <= 0 && generarRecursoAlMorir) {
+        agregarMensaje("[" + c->tipo() + "] en (" + to_string(c->getX()) + ", " + to_string(c->getY()) + ") murio por falta de energia y genero recurso.");
         manejarMuerteCriatura(c);
         return false;
     }
 
-    return c->getNivelDeEnergia() > 0; // Devuelve true si sigue viva
+    return c->getNivelDeEnergia() > 0; 
 
 }

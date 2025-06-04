@@ -3,13 +3,15 @@
 #include "Criatura.h"
 #include <vector>
 #include <iomanip>
+
 class Entorno {
 private:
     int filas;
     int columnas;
-    Elemento*** matriz; // Matriz dinámica de punteros a Elemento
-    static Entorno* instancia;//singleton
+    Elemento*** matriz; 
+    static Entorno* instancia;
     Entorno(int filas, int columnas);
+    vector<string> mensajes; 
 
 public:
     ~Entorno();
@@ -22,10 +24,15 @@ public:
     void llenarAleatoriamente();
     void eliminarElemento(int x, int y);
 
-    void moverElemento(int xOrig, int yOrig, int xnueva, int ynueva);
-    // void moverTodasLasCriaturasAleatoriamente();
+    string moverElemento(int xOrig, int yOrig, int xnueva, int ynueva);
 
-    void imprimir() const;
+    //Cambios para msj. 
+
+    void limpiarMensajes(); 
+    const vector<string>& obtenerMensajes() const;
+    void agregarMensaje(string mensaje); 
+
+    string imprimir() const;
     void limpiar(); 
      
     //Cambios nuevos. 
@@ -35,6 +42,6 @@ public:
     void manejarMuerteCriatura(Criatura* c);
     vector<Criatura*> obtenerSTLCriaturas();
     int contarRecursosDisponibles(); 
-    void degradarRecursos();
-    void iniciarSimulacionHastaQueTodasLasCriaturasMueran(); 
+    string degradarRecursos();
+  
 };
