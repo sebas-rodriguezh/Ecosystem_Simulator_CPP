@@ -13,3 +13,7 @@ int Planta::getNivelDeEnergia() const {
 string Planta::tipo() {
     return "Planta";
 }
+
+void Planta::reducirEnergiaPeroConAguaAlrededor() {
+    consumir(1); 
+}

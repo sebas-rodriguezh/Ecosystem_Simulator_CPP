@@ -68,14 +68,34 @@ void Entorno::llenarAleatoriamente() {
 
     colocadas = 0;
     while (colocadas < cantidadRecursos) {
-        int x = rand() % filas;
-        int y = rand() % columnas;
-        if (matriz[x][y] == nullptr) {
-            matriz[x][y] = FabricaElemento::crearRecursoAleatorio(x, y);
+        int xN = rand() % filas;
+        int yN = rand() % columnas;
+        if (matriz[xN][yN] == nullptr) {
+            matriz[xN][yN] = FabricaElemento::crearRecursoAleatorio(xN, yN);
             colocadas++;
         }
     }
 }
+
+bool Entorno::hayAguaAlredorDelRecurso(Recurso* recurso) 
+{
+    for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+        int x = recurso->getX() + i;
+        int y = recurso->getY() + j;
+        if (esPosicionValida(x, y) && getElemento(x,y) != nullptr) 
+        {
+            if (getElemento(x, y)->tipo() == "Agua") 
+            {
+                return true;
+            }
+        }
+    }
+} 
+    return false; 
+}
+
+
 
 
 void Entorno::eliminarElemento(int x, int y) {
@@ -125,21 +145,6 @@ string Entorno::moverElemento(int xOrig, int yOrig, int xDest, int yDest)
 }
 
 
-
-
-//void Entorno::imprimir() const {
-//    for (int i = 0; i < filas; i++) {
-//        for (int j = 0; j < columnas; j++) {
-//            if (matriz[i][j] != nullptr) {
-//                std::cout << matriz[i][j]->tipo()[0] << " ";
-//            }
-//            else {
-//                cout << ". ";
-//            }
-//        }
-//        cout << "\n";
-//    }
-//}
 
 
 string Entorno::imprimir() const {
@@ -192,8 +197,15 @@ string Entorno::degradarRecursos() {
         for (int j = 0; j < columnas; j++) {
             Elemento* elem = matriz[i][j];
 
-            if (Recurso* recurso = dynamic_cast<Recurso*>(elem)) {
-                recurso->reducirEnergia();
+            if (Recurso* recurso = dynamic_cast<Recurso*>(elem)) 
+            {
+                if (this->hayAguaAlredorDelRecurso(recurso)) 
+                {
+                    recurso->reducirEnergiaPeroConAguaAlrededor();
+                }
+                else {
+                    recurso->reducirEnergia();
+                }
 
                 if (recurso->getNivelDeEnergia() <= 0) {
                     s << "[" << recurso->tipo() << "] Recurso en (" << i << ", " << j << ") murio por agotamiento.\n"; 

@@ -17,3 +17,8 @@ string Agua::tipo()
 {
 	return "Agua"; 
 }
+
+
+void Agua::reducirEnergiaPeroConAguaAlrededor() {
+	consumir(1);
+}

@@ -13,6 +13,7 @@ public:
     int getEnergiaDisponible() const;
     void consumir(int cantidad);
     virtual void reducirEnergia() = 0; // Método abstracto
+    virtual void reducirEnergiaPeroConAguaAlrededor() = 0;
     virtual int getNivelDeEnergia() const = 0;
     virtual string tipo()=0; // retorna tipo recurso
 

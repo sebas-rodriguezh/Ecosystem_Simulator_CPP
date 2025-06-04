@@ -49,7 +49,6 @@ string AlimentacionO::alimentar(Criatura* c, Recurso* r) {
         s << "[Alimentacion] Recurso no comestible por esta criatura\n";
     }
 
-    s << "[Alimentacion] Omnivoro no encontro alimento valido\n";
     return s.str(); 
 }
 

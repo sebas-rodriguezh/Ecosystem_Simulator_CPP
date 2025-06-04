@@ -15,3 +15,7 @@ int Carne::getNivelDeEnergia() const {
 string Carne::tipo() {
 	return "Bistek";
 }
+
+void Carne::reducirEnergiaPeroConAguaAlrededor() {
+    consumir(1);
+}

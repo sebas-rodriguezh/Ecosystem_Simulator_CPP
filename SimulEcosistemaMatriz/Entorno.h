@@ -26,6 +26,8 @@ public:
 
     string moverElemento(int xOrig, int yOrig, int xnueva, int ynueva);
 
+    bool hayAguaAlredorDelRecurso(Recurso* recurso);
+
     //Cambios para msj. 
 
     void limpiarMensajes(); 

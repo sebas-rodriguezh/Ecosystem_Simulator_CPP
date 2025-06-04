@@ -8,7 +8,7 @@ public:
 	void reducirEnergia() override;
 	int getNivelDeEnergia() const override;
 	string tipo() override;
-
+	void reducirEnergiaPeroConAguaAlrededor() override;
 }; 
 
 	
