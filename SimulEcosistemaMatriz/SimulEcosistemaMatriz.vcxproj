@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Agua.h" />
     <ClInclude Include="AlimentacionC.h" />
     <ClInclude Include="AlimentacionH.h" />
     <ClInclude Include="AlimentacionO.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Agua.cpp" />
     <ClCompile Include="AlimentacionC.cpp" />
     <ClCompile Include="AlimentacionH.cpp" />
     <ClCompile Include="AlimentacionO.cpp" />

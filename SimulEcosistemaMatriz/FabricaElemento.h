@@ -3,6 +3,7 @@
 #include "FabricaCriaturas.h"
 #include "Planta.h"
 #include "Carne.h"
+#include "Agua.h"
 #include <string>
 
 class FabricaElemento {

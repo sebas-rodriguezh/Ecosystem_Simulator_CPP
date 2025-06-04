@@ -18,13 +18,16 @@ Elemento* FabricaElemento::crearAleatorio(int x, int y) {
 }
 
 Elemento* FabricaElemento::crearRecursoAleatorio(int x, int y) {
-    int tipo = rand() % 2;
+    int tipo = rand() % 3;
 
     if (tipo == 0) {
         return new Planta(x, y, 50);
     }
-    else {
+    else if(tipo==1){
         return new Carne(x, y, 60);
+    }
+    else {
+        return new Agua(x,y,20); 
     }
 }
 
@@ -36,5 +39,6 @@ Elemento* FabricaElemento::crearCriaturaAleatorio(int x, int y) {
 Elemento* FabricaElemento::crearRecursoDeTipo(string tipo, int x, int y) {
     if (tipo == "Carne") return new Carne(x, y, 30); // Valor energético
     else if (tipo == "Planta") return new Planta(x, y, 20);
+    else return new Agua(x, y, 20);
     return nullptr;
 }
